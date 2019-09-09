@@ -141,32 +141,52 @@ module.exports = {
   entry: "./src/app.js",
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./index.html"
+      template: "./public/index.html"
     })
-  ]
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
+      }
+    ]
+  }
 }
 ```
 
 And a separate configuration for production mode in webpack.prod.js:
 
 ```js
-const path = require("path")
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin")
-const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: "production",
   entry: "./src/app.js",
   output: {
-    filename: "main.[contentHash].js",
-    path: path.resolve(__dirname, "./dist")
+    filename: "main.bundle-[contentHash].js",
+    path: path.resolve(__dirname, "build")
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./index.html"
+      template: "./public/index.html"
     }),
-    new CleanWebpackPlugin()
-  ]
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "[name].[hash].css"
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      }
+    ]
+  }
 }
 ```
 
@@ -178,6 +198,34 @@ We can also install one more **amazing** tool, webpack-dev-server, which will se
 ```
 
 Now when we run `$ npm run build`, it will optimize our bundled code for production, and when we run `$ npm start` we'll have the benefits of working with webpack-dev-server.
+
+
+## Babel
+
+One of the other big problems facing Javascript developers is browser compatibility. Javascript is adding new features all the time, but we can't always rely on users having the most up-to-date browser. Babel is a *transpiler* that lets us write modern Javascript and will change it to a version of Javascript that will work on whatever browsers we care about. 
+
+Webpack works with Babel through the `babel-loader` webpack loader. You'll also need two additional Babel dependencies: `@babel/core` and `@babel/preset-env`.
+
+`$ npm install --save-dev babel-loader @babel/core @babel/preset-env`
+
+In our webpack config files, add the Babel loader for .js files:
+
+```js
+module: {
+  rules: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env']
+        }
+      }
+    }
+  ]
+}
+```
 
 ---
 
