@@ -123,7 +123,7 @@ We'll cover each of these configuration options in a bit more detail below. Ther
 
 ### `plugins` and `loaders`
 - Loaders let you work with files other than Javascript in your project. For example, if you wanted to use webpack to work with css files in your code, you could use the `css-loader` package. 
-- Plugins are extra code that extend the functionality of webpack and impact various stages of the build process. There are a number of commonly used packages (such as `html-webpack-loader`) - dive into the docs to learn more: [webpack plugins](https://webpack.js.org/plugins/)
+- Plugins are extra code that extend the functionality of webpack and impact various stages of the build process. There are a number of commonly used packages (such as `html-webpack-plugin`) - dive into the docs to learn more: [webpack plugins](https://webpack.js.org/plugins/)
 - Loaders and plugins require extra dependencies that you will need to install via npm.
 
 ## Webpack in Development vs Production
